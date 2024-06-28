@@ -1,68 +1,74 @@
-let a, b, c = 0, d = 0, e = 0, f = 0, g = false, h = "`_brainlag          ", i, j;
+let noiseCanvas, noiseTexture, rotationX = 0, rotationY = 0;
+let targetRotationX = 0, targetRotationY = 0;
+let isMouseControlled = false;
+const characters = "`_brainlag          ";
+const characterColors = [];
+let graphics, displayDiv;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   noStroke();
-  j = createGraphics(240, 48, WEBGL);
-  i = createDiv()
+
+  graphics = createGraphics(100, 40, WEBGL);
+  displayDiv = createDiv()
     .position(0, 0)
-    .style("color", "white")
+    .style("color", "black")
     .style("font-size", "10px")
     .style("font-family", "monospace");
 
   // Generate noise image
-  a = createGraphics(240, 48);
-  a.loadPixels();
-  for (let y = 0; y < a.height; y++) {
-    for (let x = 0; x < a.width; x++) {
-      const noiseValue = noise(x * 0.1, y * 0.1) * 255;
-      a.set(x, y, color(noiseValue));
+  noiseCanvas = createGraphics(100, 40);
+  noiseCanvas.loadPixels();
+  for (let y = 0; y < noiseCanvas.height; y++) {
+    for (let x = 0; x < noiseCanvas.width; x++) {
+      const noiseValue = noise(x * 0.1, y * 1) * 255;
+      noiseCanvas.set(x, y, color(noiseValue));
     }
   }
-  a.updatePixels();
-  b = a.width / a.height;
+  noiseCanvas.updatePixels();
+
+  // Define colors for each character
+  for (let i = 1; i < characters.length; i++) {
+    characterColors.push(color(random(255), random(255), random(255)));
+  }
 }
 
 function draw() {
   background(0);
-  if (!g) {
-    e = map(mouseY / height, 0, 1, radians(70), radians(-70));
-    f = map(mouseX / width, 0, 1, radians(-70), radians(70));
-  }
-  c = lerp(c, e, 0.1);
-  d = lerp(d, f, 0.1);
-  j.background(0);
-  j.push();
-  j.translate(0, 0, 500);
-  j.rotateX(c);
-  j.rotateY(d);
-  j.texture(a);
-  j.plane(j.width, j.height);
-  j.pop();
-  j.loadPixels();
-  let k = "";
-  for (let l = 1; l < j.height; l++) {
-    for (let m = 1; m < j.width; m++) {
-      const n = (m + l * j.width) * 4;
-      const o = (j.pixels[n] + j.pixels[n + 1] + j.pixels[n + 2]) / 3;
-      const p = h.charAt(floor(map(o, 0, 255, 0, h.length)));
-      k += p === " " ? "&nbsp;" : p;
-    }
-    k += "<br/>";
-  }
-  i.html(k);
-  
-  // Adjust the size of the i element to fit within the window dimensions
-  i.style('width', 'auto');
-  i.style('height', 'auto');
-  const q = i.size();
-  const maxWidth = min(q.width, windowWidth - 20); // Adding some padding
-  const maxHeight = min(q.height, windowHeight - 20); // Adding some padding
 
-  i.style('max-width', `${maxWidth}px`);
-  i.style('max-height', `${maxHeight}px`);
-  i.style('overflow', 'hidden');
-  i.position((windowWidth - maxWidth) / 2, (windowHeight - maxHeight) / 2);
+  if (!isMouseControlled) {
+    targetRotationX = map(mouseY / height, 0, 1, radians(70), radians(-70));
+    targetRotationY = map(mouseX / width, 0, 1, radians(-70), radians(70));
+  }
+
+  rotationX = lerp(rotationX, targetRotationX, 0.1);
+  rotationY = lerp(rotationY, targetRotationY, 0.1);
+
+  graphics.background(0);
+  graphics.push();
+  graphics.translate(0, 0, 500);
+  graphics.rotateX(rotationX);
+  graphics.rotateY(rotationY);
+  graphics.texture(noiseCanvas);
+  graphics.plane(graphics.width, graphics.height);
+  graphics.pop();
+  graphics.loadPixels();
+
+  let htmlContent = "";
+  for (let y = 1; y < graphics.height; y++) {
+    for (let x = 1; x < graphics.width; x++) {
+      const index = (x + y * graphics.width) * 4;
+      const brightness = (graphics.pixels[index] + graphics.pixels[index + 1] + graphics.pixels[index + 2]) / 3;
+      const char = characters.charAt(floor(map(brightness, 0, 255, 0, characters.length)));
+      const colorIndex = characters.indexOf(char);
+      const bgColor = characterColors[colorIndex];
+      htmlContent += char === " " ? "&nbsp;" : `<span style="background-color: rgb(${red(bgColor)},${green(bgColor)},${blue(bgColor)})">${char}</span>`;
+    }
+    htmlContent += "<br/>";
+  }
+  displayDiv.html(htmlContent);
+  const divSize = displayDiv.size();
+  displayDiv.position((windowWidth - divSize.width) / 2, (windowHeight - divSize.height) / 2);
 }
 
 function windowResized() {
