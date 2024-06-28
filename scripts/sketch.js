@@ -51,11 +51,18 @@ function draw() {
     k += "<br/>";
   }
   i.html(k);
+  
+  // Adjust the size of the i element to fit within the window dimensions
+  i.style('width', 'auto');
+  i.style('height', 'auto');
   const q = i.size();
-  i.position((windowWidth - q.width) / 2, (windowHeight - q.height) / 2);
-  i.style('max-width', `${windowWidth}px`);
-  i.style('max-height', `${windowHeight}px`);
+  const maxWidth = min(q.width, windowWidth - 20); // Adding some padding
+  const maxHeight = min(q.height, windowHeight - 20); // Adding some padding
+
+  i.style('max-width', `${maxWidth}px`);
+  i.style('max-height', `${maxHeight}px`);
   i.style('overflow', 'hidden');
+  i.position((windowWidth - maxWidth) / 2, (windowHeight - maxHeight) / 2);
 }
 
 function windowResized() {
