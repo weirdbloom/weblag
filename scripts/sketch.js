@@ -15,7 +15,10 @@ function setup() {
     .style("color", "black")
     .style("font-size", "10px")
     .style("font-family", "monospace")
-    .style("overflow", "hidden");
+    .style("overflow", "hidden")
+    .style("max-width", "90vw")
+    .style("max-height", "90vh")
+    .style("white-space", "nowrap");
 
   // Generate noise image
   noiseCanvas = createGraphics(100, 40);
