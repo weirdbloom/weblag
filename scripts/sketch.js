@@ -11,14 +11,16 @@ function setup() {
 
   graphics = createGraphics(100, 40, WEBGL);
   displayDiv = createDiv()
-    .position('absolute')
+    .position('fixed')
     .style("color", "black")
     .style("font-size", "10px")
     .style("font-family", "monospace")
     .style("overflow", "hidden")
-    .style("max-width", "90vw")
-    .style("max-height", "90vh")
-    .style("white-space", "nowrap");
+    .style("max-width", "100vw")
+    .style("max-height", "100vh")
+    .style("white-space", "nowrap")
+    .style("padding", "10px")
+    .style("box-sizing", "border-box");
 
   // Generate noise image
   noiseCanvas = createGraphics(100, 40);
