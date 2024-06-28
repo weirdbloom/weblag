@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainlag</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/addons/p5.sound.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="navbar-left">
+                <a href="mailto:contact@brainlag.live">contact</a>
+            </div>
+            <div class="navbar-mid">
+            </div>
+            <div class="navbar-right">
+                &copy;2024 brainlag
+            </div>
+        </div>
+    </nav>
+    <main>
+        <p></p>
+    </main>
+    <!--<div class="content">
+    </div><!-->
+    <script>
+        document.querySelector('.navbar-right').innerHTML = `&copy;${new Date().getFullYear()} brainlag`;
+    </script>
+    <script src="scripts\sketch.js"></script>
+</body>
+</html>
