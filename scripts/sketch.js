@@ -53,6 +53,9 @@ function draw() {
   i.html(k);
   const q = i.size();
   i.position((windowWidth - q.width) / 2, (windowHeight - q.height) / 2);
+  i.style('max-width', `${windowWidth}px`);
+  i.style('max-height', `${windowHeight}px`);
+  i.style('overflow', 'hidden');
 }
 
 function windowResized() {
